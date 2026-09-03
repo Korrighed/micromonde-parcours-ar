@@ -2,6 +2,12 @@
 
 Procédure native 8th Wall (`@8thwall/image-target-cli`), pas d'outil externe. Sources en bas de page.
 
+## 0. 8th Wall Desktop (app) — mode Non-Studio
+
+Pour un projet custom (Vite/Three.js, pas Studio), l'app Desktop attend un dossier `image-targets/` à la racine du repo — fait sur ce repo (déplacé depuis `public/assets/targets/`). **Non documenté** : est-ce qu'on y dépose la photo source brute (l'app génère elle-même le tracking) ou les fichiers déjà produits par `image-target-cli` (json, cropped, luminance, thumbnail) ? Recherché sur la doc officielle et les exemples GitHub du projet, sans réponse trouvée. *Inconnu, à vérifier à l'installation réelle de l'app* — en attendant, les deux (photo source `test-8th.jpg` + sortie complète du CLI) sont dans `image-targets/`, à trier une fois l'app testée.
+
+Exigence minimale confirmée et vérifiée sur ce repo : `npm run serve -- --port <N>` doit démarrer Vite sur `<N>` (script `serve` ajouté dans `package.json`, testé OK avec `--port 8888`).
+
 ## 1. Exigences sur l'image source
 
 Vérifiées sur la doc 8th Wall officielle :
@@ -19,7 +25,7 @@ Vérifiées sur la doc 8th Wall officielle :
 
 ### Orientation EXIF
 
-**Résolu empiriquement (2026-09-04)** : testé sur `public/test-8th.jpg` (photo verticale, Galaxy S25+, EXIF `orientation=upper-right`). Le thumbnail généré (`test-8th_thumbnail.jpg`) est droit, lisible, orientation portrait correcte. Le CLI respecte nativement l'orientation EXIF — pas de pré-traitement/rotation manuelle nécessaire.
+**Résolu empiriquement (2026-09-04)** : testé sur `image-targets/test-8th.jpg` (photo verticale, Galaxy S25+, EXIF `orientation=upper-right`). Le thumbnail généré (`test-8th_thumbnail.jpg`) est droit, lisible, orientation portrait correcte. Le CLI respecte nativement l'orientation EXIF — pas de pré-traitement/rotation manuelle nécessaire.
 
 ## 2. Utilisation du CLI
 
@@ -29,7 +35,7 @@ npx @8thwall/image-target-cli@latest
 
 Le CLI enchaîne 3 prompts interactifs :
 
-1. Chemin de l'image source (ex: `public/test-8th.jpg`)
+1. Chemin de l'image source (ex: `image-targets/test-8th.jpg`)
 2. Type de crop — centré automatique, ou personnalisé (offsets `top`/`left` + dimensions `width`/`height`)
 3. Dossier de destination + nom du target
 

@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-
-const MODEL_URL = '/assets/models/poc.glb'
+import modelUrl from '../assets/models/poc.glb?url'
 
 // Pattern verifie sur github.com/8thwall/threejs-world-effects-example (src/threejs-scene-init.js).
 // XR8.Threejs.pipelineModule() cree deja camera + scene + renderer ; on recupere ces objets
@@ -30,7 +29,7 @@ export const worldScenePipelineModule = () => {
       // Modele 3D (poc.glb, export Blender) ancre en world tracking (SLAM).
       // But du test : verifier que l'objet reste ancre dans l'espace pendant
       // que l'utilisateur se deplace autour avec le telephone.
-      new GLTFLoader().load(MODEL_URL, (gltf) => {
+      new GLTFLoader().load(modelUrl, (gltf) => {
         model = gltf.scene
         placeInFrontOfCamera(model, camera)
         scene.add(model)

@@ -32,10 +32,11 @@ src/
   map/          carte Leaflet (à venir)
   content/      contenus texte/audio par fresque (à venir)
   progress/     état de progression localStorage (à venir)
+  assets/
+    models/     modèles 3D (fournis par le créa), importés en ES6 (`?url`), bundlés/hashés au build
+image-targets/   photo source + fichiers générés par @8thwall/image-target-cli, à la racine (exigence 8th Wall Desktop, mode Non-Studio)
 public/
   assets/
-    models/     modèles 3D (fournis par le créa, pas produits ici)
-    targets/    fichiers de tracking générés par @8thwall/image-target-cli
     audio/      pistes audio des légendes/contenus scientifiques
 ```
 
@@ -55,9 +56,9 @@ Aucun compte, aucune clé d'app requise (modèle gratuit post-28/02/2026).
 
 Pipeline : `XR8.addCameraPipelineModules([...])` avec `XR8.Threejs.pipelineModule()` + `XR8.XrController.pipelineModule()` (active le SLAM) + notre module `worldScenePipelineModule` (`src/ar/worldScene.ts`), lancé via `XR8.run({canvas})`.
 
-**Fait dans ce PoC** : modèle 3D (`public/assets/models/poc.glb`, export Blender, chargé via `GLTFLoader`) ancré en world tracking (SLAM seul, pas d'image target). Animation jouée via `THREE.AnimationMixer` si le `.glb` en contient une.
+**Fait dans ce PoC** : modèle 3D (`src/assets/models/poc.glb`, export Blender, importé en ES6 et chargé via `GLTFLoader`) ancré en world tracking (SLAM seul, pas d'image target). Animation jouée via `THREE.AnimationMixer` si le `.glb` en contient une. Build vérifié (`npm run build`) : l'asset est bien résolu et hashé (`dist/assets/poc-*.glb`).
 
-**Pas encore fait** : intégration de l'image target dans le pipeline (`XR8.XrController.configure({ imageTargetData: [...] })`) — le fichier de tracking est généré (`public/assets/targets/test-8th.json`), reste à le câbler dans `main.ts`. Procédure complète de génération et exigences sur l'image source : [docs/image-target.md](docs/image-target.md).
+**Pas encore fait** : intégration de l'image target dans le pipeline (`XR8.XrController.configure({ imageTargetData: [...] })`) — le fichier de tracking est généré (`image-targets/test-8th.json`), reste à le câbler dans `main.ts`. Procédure complète de génération et exigences sur l'image source : [docs/image-target.md](docs/image-target.md).
 
 ## Lancer en local
 
@@ -75,7 +76,7 @@ Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN v
 - AR Simulator + Device Connect (test sans téléphone physique)
 - Gestion d'assets et d'image targets en GUI
 
-**Pas encore activé sur ce repo** : le mode Non-Studio exige une structure de dossier précise que nous ne suivons pas actuellement — `src/assets/` (nous : `public/assets/`), `image-targets/` à la racine sans sous-dossier (nous : `public/assets/targets/`), et un script `npm run serve` respectant `--port`/`$PORT` (nous : `npm run dev`, Vite direct). Tant que ce n'est pas restructuré, le flux de test reste celui ci-dessous (téléphone + `npm run dev`).
+**Structure alignée sur les exigences Non-Studio** : `src/assets/` pour les modèles, `image-targets/` à la racine sans sous-dossier, script `npm run serve -- --port <N>` (testé, bind correctement). **Non vérifié en revanche** : le contenu attendu dans `image-targets/` (photo source brute vs fichiers déjà générés par `image-target-cli`) n'est pas documenté officiellement — on y a mis les deux (source + sortie du CLI) en attendant de tester avec l'app réellement installée. Aucun test AR n'a encore été fait avec l'app Desktop elle-même — à valider à l'installation. Détail : [docs/image-target.md](docs/image-target.md).
 
 ### Tester sur téléphone
 
