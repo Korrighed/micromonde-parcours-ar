@@ -55,9 +55,9 @@ Aucun compte, aucune clé d'app requise (modèle gratuit post-28/02/2026).
 
 Pipeline : `XR8.addCameraPipelineModules([...])` avec `XR8.Threejs.pipelineModule()` + `XR8.XrController.pipelineModule()` (active le SLAM) + notre module `worldScenePipelineModule` (`src/ar/worldScene.ts`), lancé via `XR8.run({canvas})`.
 
-**Fait dans ce PoC** : cube placeholder ancré en world tracking (SLAM seul, pas d'image target).
+**Fait dans ce PoC** : modèle 3D (`public/assets/models/poc.glb`, export Blender, chargé via `GLTFLoader`) ancré en world tracking (SLAM seul, pas d'image target). Animation jouée via `THREE.AnimationMixer` si le `.glb` en contient une.
 
-**Pas encore fait** : intégration de l'image target (photo de fresque → `npx @8thwall/image-target-cli@latest` → `XR8.XrController.configure({ imageTargetData: [...] })`). Bloqué en attente d'une photo de fresque réelle et du modèle 3D tortue.
+**Pas encore fait** : intégration de l'image target dans le pipeline (`XR8.XrController.configure({ imageTargetData: [...] })`) — le fichier de tracking est généré (`public/assets/targets/test-8th.json`), reste à le câbler dans `main.ts`. Procédure complète de génération et exigences sur l'image source : [docs/image-target.md](docs/image-target.md).
 
 ## Lancer en local
 
@@ -67,6 +67,15 @@ npm run dev
 ```
 
 Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN via certificat). `vite.config.ts` embarque `@vitejs/plugin-basic-ssl` pour ça.
+
+### 8th Wall Desktop (app)
+
+[8th Wall Desktop](https://8thwall.org/downloads) — Mac et Windows uniquement, pas de Linux. Utile pour ce projet en **mode Non-Studio** (notre projet est un Vite/Three.js custom, pas un projet créé via leur Studio) :
+
+- AR Simulator + Device Connect (test sans téléphone physique)
+- Gestion d'assets et d'image targets en GUI
+
+**Pas encore activé sur ce repo** : le mode Non-Studio exige une structure de dossier précise que nous ne suivons pas actuellement — `src/assets/` (nous : `public/assets/`), `image-targets/` à la racine sans sous-dossier (nous : `public/assets/targets/`), et un script `npm run serve` respectant `--port`/`$PORT` (nous : `npm run dev`, Vite direct). Tant que ce n'est pas restructuré, le flux de test reste celui ci-dessous (téléphone + `npm run dev`).
 
 ### Tester sur téléphone
 

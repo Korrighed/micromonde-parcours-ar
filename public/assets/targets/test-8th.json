@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/test-8th_luminance.jpg",
+  "metadata": null,
+  "name": "test-8th",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 0,
+    "width": 3000,
+    "height": 4000,
+    "isRotated": true,
+    "originalWidth": 3000,
+    "originalHeight": 4000
+  },
+  "resources": {
+    "originalImage": "test-8th_original.jpg",
+    "croppedImage": "test-8th_cropped.jpg",
+    "thumbnailImage": "test-8th_thumbnail.jpg",
+    "luminanceImage": "test-8th_luminance.jpg"
+  },
+  "created": 1788476539581,
+  "updated": 1788476539581
+}
