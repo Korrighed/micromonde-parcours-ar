@@ -4,8 +4,8 @@
   "name": "poc-peruche",
   "type": "PLANAR",
   "properties": {
-    "left": 96,
     "top": 0,
+    "left": 192,
     "width": 960,
     "height": 1280,
     "isRotated": true,
@@ -19,5 +19,5 @@
     "luminanceImage": "poc-peruche_luminance.png"
   },
   "created": 1788492411166,
-  "updated": 1788492411166
+  "updated": 1788494085775
 }

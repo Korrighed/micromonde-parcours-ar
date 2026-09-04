@@ -4,8 +4,8 @@
   "name": "poc-tortue",
   "type": "PLANAR",
   "properties": {
+    "top": 77,
     "left": 0,
-    "top": 226,
     "width": 622,
     "height": 829,
     "isRotated": true,
@@ -19,5 +19,5 @@
     "luminanceImage": "poc-tortue_luminance.png"
   },
   "created": 1788492468992,
-  "updated": 1788492468992
+  "updated": 1788494080530
 }
