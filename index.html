@@ -1,13 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>micromonde-parcours-ar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MicroMonde — PoC AR</title>
+    <!-- Coeur du moteur XR8 (image target + SLAM). URLs et pattern verifies sur
+         github.com/8thwall/threejs-world-effects-example (source reelle, pas la doc). -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js"
+      async
+      crossorigin="anonymous"
+      data-preload-chunks="slam"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@8thwall/xrextras@1/dist/xrextras.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@8thwall/landing-page@1/dist/landing-page.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <div id="app"></div>
+    <canvas id="camerafeed"></canvas>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

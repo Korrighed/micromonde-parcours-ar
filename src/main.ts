@@ -1,60 +1,62 @@
 import './style.css'
-import heroImg from './assets/hero.png'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import { setupCounter } from './counter.ts'
+import * as THREE from 'three'
+import { worldScenePipelineModule } from './ar/worldScene'
+import imageTargetData from '../image-targets/test-8th.json'
+import imageTargetImageUrl from '../image-targets/test-8th_luminance.jpg?url'
+import imageTargetData2 from '../image-targets/poc-test2.json'
+import imageTargetImageUrl2 from '../image-targets/poc-test2_luminance.jpg?url'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+// XR8.Threejs.pipelineModule() lit window.THREE en global (pattern legacy
+// script-tag) : verifie sur github.com/8thwall/threejs-world-effects-example
+// (src/app.js) — sans ca, "window.THREE does not exist" au chargement.
+window.THREE = THREE
 
-<div class="ticks"></div>
+// imagePath dans le JSON est un chemin relatif brut (image-targets/...) : le moteur le
+// fetch tel quel au runtime, ce qui ne resout a rien avec notre bundler. On le remplace
+// par l'URL bundlee par Vite (meme pattern que le .glb). Verifie sur le README officiel
+// de @8thwall/image-target-cli : "The imagePath field ... will tell the engine where to
+// load the tracked image" (pas de precision sur le format attendu, d'ou ce contournement).
+imageTargetData.imagePath = imageTargetImageUrl
+imageTargetData2.imagePath = imageTargetImageUrl2
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+// Module de test : logge la reconnaissance de poc-test2 (2e target, page "Rodeur")
+// sans afficher de modele — sert a verifier que plusieurs targets coexistent.
+const targetLoggerPipelineModule = () => ({
+  name: 'micromonde-target-logger',
+  listeners: [
+    {
+      event: 'reality.imagefound',
+      process: ({ detail }: { detail: { name: string } }) => {
+        if (detail.name === 'poc-test2') console.log('[target-logger] poc-test2 trouve')
+      },
+    },
+    {
+      event: 'reality.imagelost',
+      process: ({ detail }: { detail: { name: string } }) => {
+        if (detail.name === 'poc-test2') console.log('[target-logger] poc-test2 perdu')
+      },
+    },
+  ],
+})
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+// Pattern verifie sur github.com/8thwall/threejs-world-effects-example (src/app.js).
+const onxrloaded = () => {
+  XR8.XrController.configure({ imageTargetData: [imageTargetData, imageTargetData2] })
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+  XR8.addCameraPipelineModules([
+    XR8.GlTextureRenderer.pipelineModule(),
+    XR8.Threejs.pipelineModule(),
+    XR8.XrController.pipelineModule(), // active le SLAM (world tracking).
+    LandingPage.pipelineModule(),
+    XRExtras.FullWindowCanvas.pipelineModule(),
+    XRExtras.Loading.pipelineModule(),
+    XRExtras.RuntimeError.pipelineModule(),
+    worldScenePipelineModule(),
+    targetLoggerPipelineModule(),
+  ])
+
+  const canvas = document.getElementById('camerafeed') as HTMLCanvasElement
+  XR8.run({ canvas })
+}
+
+window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded)
