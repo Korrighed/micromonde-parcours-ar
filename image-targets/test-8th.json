@@ -4,10 +4,10 @@
   "name": "test-8th",
   "type": "PLANAR",
   "properties": {
-    "left": 0,
-    "top": 0,
-    "width": 3000,
-    "height": 4000,
+    "top": 379,
+    "left": 284,
+    "width": 2431,
+    "height": 3241,
     "isRotated": true,
     "originalWidth": 3000,
     "originalHeight": 4000
@@ -19,5 +19,5 @@
     "luminanceImage": "test-8th_luminance.jpg"
   },
   "created": 1788476539581,
-  "updated": 1788476539581
+  "updated": 1788482137558
 }

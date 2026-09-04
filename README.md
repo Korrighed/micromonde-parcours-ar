@@ -56,9 +56,11 @@ Aucun compte, aucune clé d'app requise (modèle gratuit post-28/02/2026).
 
 Pipeline : `XR8.addCameraPipelineModules([...])` avec `XR8.Threejs.pipelineModule()` + `XR8.XrController.pipelineModule()` (active le SLAM) + notre module `worldScenePipelineModule` (`src/ar/worldScene.ts`), lancé via `XR8.run({canvas})`.
 
-**Fait dans ce PoC** : modèle 3D (`src/assets/models/poc.glb`, export Blender, importé en ES6 et chargé via `GLTFLoader`) ancré en world tracking (SLAM seul, pas d'image target). Animation jouée via `THREE.AnimationMixer` si le `.glb` en contient une. Build vérifié (`npm run build`) : l'asset est bien résolu et hashé (`dist/assets/poc-*.glb`).
+**Fait dans ce PoC** : modèle 3D (`src/assets/models/poc.glb`, export Blender, importé en ES6 et chargé via `GLTFLoader`) ancré en world tracking (SLAM) + image target. Le modèle reste caché (`visible = false`) tant que la page `image-targets/test-8th.jpg` n'est pas scannée ; `XR8.XrController.configure({ imageTargetData: [...] })` câblé dans `main.ts`, pose fixée une fois sur l'évènement `reality.imagefound` puis le SLAM prend le relai pour l'ancrage. Animation jouée via `THREE.AnimationMixer` si le `.glb` en contient une.
 
-**Pas encore fait** : intégration de l'image target dans le pipeline (`XR8.XrController.configure({ imageTargetData: [...] })`) — le fichier de tracking est généré (`image-targets/test-8th.json`), reste à le câbler dans `main.ts`. Procédure complète de génération et exigences sur l'image source : [docs/image-target.md](docs/image-target.md).
+**Validé sur téléphone (Android/Chrome)** : world tracking, animation, et reconnaissance de l'image target fonctionnels — le modèle apparaît uniquement sur la bonne page, disparaît en changeant de page, aucun faux positif sur les pages voisines. L'échelle du modèle se règle nativement via l'inspecteur d'asset de 8th Wall Desktop (§ ci-dessous), pas de code custom. Détail complet : [docs/8thwall-image-target.md](docs/8thwall-image-target.md).
+
+**Pas encore fait** : un seul target (`test-8th`) est enregistré — comportement avec plusieurs pages/targets simultanés non testé.
 
 ## Lancer en local
 
@@ -74,9 +76,9 @@ Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN v
 [8th Wall Desktop](https://8thwall.org/downloads) — Mac et Windows uniquement, pas de Linux. Utile pour ce projet en **mode Non-Studio** (notre projet est un Vite/Three.js custom, pas un projet créé via leur Studio) :
 
 - AR Simulator + Device Connect (test sans téléphone physique)
-- Gestion d'assets et d'image targets en GUI
+- Gestion d'assets en GUI — inspecteur de mesh (`src/assets/models/poc.glb`) avec pivot, taille de texture, simplification, **échelle** : modifie le fichier `.glb` directement, effet immédiat au reload
 
-**Structure alignée sur les exigences Non-Studio** : `src/assets/` pour les modèles, `image-targets/` à la racine sans sous-dossier, script `npm run serve -- --port <N>` (testé, bind correctement). **Non vérifié en revanche** : le contenu attendu dans `image-targets/` (photo source brute vs fichiers déjà générés par `image-target-cli`) n'est pas documenté officiellement — on y a mis les deux (source + sortie du CLI) en attendant de tester avec l'app réellement installée. Aucun test AR n'a encore été fait avec l'app Desktop elle-même — à valider à l'installation. Détail : [docs/image-target.md](docs/image-target.md).
+**Structure alignée sur les exigences Non-Studio** : `src/assets/` pour les modèles, `image-targets/` à la racine sans sous-dossier, script `npm run serve -- --port <N>`. **Non documenté officiellement** : le contenu exact attendu dans `image-targets/` (photo source brute vs fichiers déjà générés par `image-target-cli`) — les deux (source + sortie du CLI) y sont en attendant clarification. Détail complet : [docs/8thwall-image-target.md](docs/8thwall-image-target.md).
 
 ### Tester sur téléphone
 
