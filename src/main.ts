@@ -1,10 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
 import { worldScenePipelineModule } from './ar/worldScene'
-import imageTargetData from '../image-targets/test-8th.json'
-import imageTargetImageUrl from '../image-targets/test-8th_luminance.jpg?url'
-import imageTargetData2 from '../image-targets/poc-test2.json'
-import imageTargetImageUrl2 from '../image-targets/poc-test2_luminance.jpg?url'
+import imageTargetData from '../image-targets/poc-peruche.json'
+import imageTargetImageUrl from '../image-targets/poc-peruche_luminance.png?url'
+import imageTargetData2 from '../image-targets/poc-tortue.json'
+import imageTargetImageUrl2 from '../image-targets/poc-tortue_luminance.png?url'
 
 // XR8.Threejs.pipelineModule() lit window.THREE en global (pattern legacy
 // script-tag) : verifie sur github.com/8thwall/threejs-world-effects-example
@@ -19,21 +19,21 @@ window.THREE = THREE
 imageTargetData.imagePath = imageTargetImageUrl
 imageTargetData2.imagePath = imageTargetImageUrl2
 
-// Module de test : logge la reconnaissance de poc-test2 (2e target, page "Rodeur")
-// sans afficher de modele — sert a verifier que plusieurs targets coexistent.
+// Module de test : logge la reconnaissance de chaque target — sert a verifier
+// que plusieurs targets coexistent sans interference.
 const targetLoggerPipelineModule = () => ({
   name: 'micromonde-target-logger',
   listeners: [
     {
       event: 'reality.imagefound',
       process: ({ detail }: { detail: { name: string } }) => {
-        if (detail.name === 'poc-test2') console.log('[target-logger] poc-test2 trouve')
+        console.log(`[target-logger] ${detail.name} trouve`)
       },
     },
     {
       event: 'reality.imagelost',
       process: ({ detail }: { detail: { name: string } }) => {
-        if (detail.name === 'poc-test2') console.log('[target-logger] poc-test2 perdu')
+        console.log(`[target-logger] ${detail.name} perdu`)
       },
     },
   ],

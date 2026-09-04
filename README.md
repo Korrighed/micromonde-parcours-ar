@@ -66,8 +66,10 @@ Pipeline : `XR8.addCameraPipelineModules([...])` avec `XR8.Threejs.pipelineModul
 
 ```bash
 npm install
-npm run dev
+npm run dev -- --port 8888
 ```
+
+Port `8888` requis pour la reconnaissance du projet par 8th Wall Desktop (voir section ci-dessous et [docs/8thwall-image-target.md](docs/8thwall-image-target.md) §0).
 
 Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN via certificat). `vite.config.ts` embarque `@vitejs/plugin-basic-ssl` pour ça.
 

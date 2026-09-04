@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/poc-peruche_luminance.png",
+  "metadata": null,
+  "name": "poc-peruche",
+  "type": "PLANAR",
+  "properties": {
+    "left": 96,
+    "top": 0,
+    "width": 960,
+    "height": 1280,
+    "isRotated": true,
+    "originalWidth": 1152,
+    "originalHeight": 1280
+  },
+  "resources": {
+    "originalImage": "poc-peruche_original.png",
+    "croppedImage": "poc-peruche_cropped.png",
+    "thumbnailImage": "poc-peruche_thumbnail.png",
+    "luminanceImage": "poc-peruche_luminance.png"
+  },
+  "created": 1788492411166,
+  "updated": 1788492411166
+}

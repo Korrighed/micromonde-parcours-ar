@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/poc-tortue_luminance.png",
+  "metadata": null,
+  "name": "poc-tortue",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 226,
+    "width": 622,
+    "height": 829,
+    "isRotated": true,
+    "originalWidth": 622,
+    "originalHeight": 1280
+  },
+  "resources": {
+    "originalImage": "poc-tortue_original.png",
+    "croppedImage": "poc-tortue_cropped.png",
+    "thumbnailImage": "poc-tortue_thumbnail.png",
+    "luminanceImage": "poc-tortue_luminance.png"
+  },
+  "created": 1788492468992,
+  "updated": 1788492468992
+}
