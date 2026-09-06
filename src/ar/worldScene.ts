@@ -1,11 +1,41 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import parrotModelUrl from '../assets/models/poc-parrot.glb?url'
-import turtleModelUrl from '../assets/models/poc-turtle.glb?url'
+import parrotModelUrl from '../assets/models/poc-parrotv2.glb?url'
+import turtleModelUrl from '../assets/models/poc-turtlev2.glb?url'
 
 const TARGET_MODELS: Record<string, string> = {
   'poc-peruche': parrotModelUrl,
   'poc-tortue': turtleModelUrl,
+}
+
+const TURTLE_TARGET = 'poc-tortue'
+const TURTLE_CLIPS = {
+  swim: 'ArmatureAction',
+  light: 'Animated Water Caustics LightAction',
+} as const
+const TURTLE_SWIM_SPEED = 0.5
+
+const PARROT_TARGET = 'poc-peruche'
+const PARROT_CLIPS = {
+  fly: 'ArmatureAction',
+} as const
+const PARROT_FLY_SPEED = 1.25
+
+const playLoop = (
+  mixer: THREE.AnimationMixer,
+  clips: THREE.AnimationClip[],
+  name: string,
+  timeScale = 1,
+) => {
+  const clip = clips.find((c) => c.name === name)
+  if (!clip) {
+    console.warn(`[worldScene] clip introuvable : ${name}`)
+    return
+  }
+  const action = mixer.clipAction(clip)
+  action.setLoop(THREE.LoopRepeat, Infinity)
+  action.timeScale = timeScale
+  action.play()
 }
 
 // Pattern verifie sur github.com/8thwall/threejs-world-effects-example (src/threejs-scene-init.js)
@@ -60,7 +90,14 @@ export const worldScenePipelineModule = () => {
 
           if (gltf.animations.length > 0) {
             const mixer = new THREE.AnimationMixer(model)
-            mixer.clipAction(gltf.animations[0]).play()
+            if (name === TURTLE_TARGET) {
+              playLoop(mixer, gltf.animations, TURTLE_CLIPS.swim, TURTLE_SWIM_SPEED)
+              playLoop(mixer, gltf.animations, TURTLE_CLIPS.light)
+            } else if (name === PARROT_TARGET) {
+              playLoop(mixer, gltf.animations, PARROT_CLIPS.fly, PARROT_FLY_SPEED)
+            } else {
+              mixer.clipAction(gltf.animations[0]).play()
+            }
             mixers.push(mixer)
           }
         })
