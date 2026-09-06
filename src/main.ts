@@ -1,6 +1,10 @@
+import './ui/variables.css'
 import './style.css'
+import './ui/ui.css'
 import * as THREE from 'three'
 import { worldScenePipelineModule } from './ar/worldScene'
+import { initHud, showHudFor, hideHud } from './ui/hud'
+import { initPanel } from './ui/panel'
 import imageTargetData from '../image-targets/poc-peruche.json'
 import imageTargetImageUrl from '../image-targets/poc-peruche_luminance.png?url'
 import imageTargetData2 from '../image-targets/poc-tortue.json'
@@ -30,10 +34,31 @@ const targetLoggerPipelineModule = () => ({
         console.log(`[target-logger] ${detail.name} trouve`)
       },
     },
-    {
+      {
       event: 'reality.imagelost',
       process: ({ detail }: { detail: { name: string } }) => {
         console.log(`[target-logger] ${detail.name} perdu`)
+      },
+    },
+  ],
+})
+
+// Module UI : ecoute seule (aucun rendu Three.js, aucune modification du
+// pipeline AR existant) — montre/cache le HUD selon le target reconnu.
+// Meme principe que targetLoggerPipelineModule ci-dessus.
+const uiPipelineModule = () => ({
+  name: 'micromonde-ui',
+  listeners: [
+    {
+      event: 'reality.imagefound',
+      process: ({ detail }: { detail: { name: string } }) => {
+        showHudFor(detail.name)
+      },
+    },
+    {
+      event: 'reality.imagelost',
+      process: () => {
+        hideHud()
       },
     },
   ],
@@ -53,7 +78,11 @@ const onxrloaded = () => {
     XRExtras.RuntimeError.pipelineModule(),
     worldScenePipelineModule(),
     targetLoggerPipelineModule(),
+    uiPipelineModule(),
   ])
+
+  initHud()
+  initPanel()
 
   const canvas = document.getElementById('camerafeed') as HTMLCanvasElement
   XR8.run({ canvas })

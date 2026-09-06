@@ -5,6 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>MicroMonde — PoC AR</title>
+    <!-- Typographie DA (voir DA.md) : Fleur De Leah (titres) + Quicksand (texte, light
+         de preference sous les titres) — polices Google Fonts, seul point de chargement. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&family=Quicksand:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <!-- Coeur du moteur XR8 (image target + SLAM). URLs et pattern verifies sur
          github.com/8thwall/threejs-world-effects-example (source reelle, pas la doc). -->
     <script
@@ -24,6 +32,81 @@
   </head>
   <body>
     <canvas id="camerafeed"></canvas>
+
+    <!-- HUD (4 boutons ronds) + panel : overlay DOM independant du pipeline
+         XR8/Three.js (src/ar/worldScene.ts). Cache par defaut, affiche par
+         src/ui/hud.ts sur reality.imagefound (voir uiPipelineModule dans main.ts).
+         Positions (transform) mises a jour en JS a chaque frame, ancrees sur
+         l'image — voir src/content/buttonLayout.ts pour les offsets par fresque. -->
+    <div id="hud" hidden>
+      <button class="hud-btn hud-btn--content" data-key="molecule" aria-label="Composition moleculaire">
+        <svg viewBox="0 0 100 100" fill="none">
+          <line x1="50" y1="55" x2="26" y2="26" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <line x1="50" y1="55" x2="74" y2="30" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <line x1="50" y1="55" x2="60" y2="80" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="50" cy="55" r="10" fill="currentColor"/>
+          <circle cx="26" cy="26" r="8" fill="currentColor"/>
+          <circle cx="74" cy="30" r="8" fill="currentColor"/>
+          <circle cx="60" cy="80" r="8" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="hud-btn hud-btn--content" data-key="histoire" aria-label="Histoire traditionnelle">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path
+            d="M50 28 C40 18 20 16 10 20 V76 C20 72 40 74 50 84 C60 74 80 72 90 76 V20 C80 16 60 18 50 28 Z"
+            stroke="currentColor"
+            stroke-width="5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+          <line x1="50" y1="28" x2="50" y2="84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="hud-btn hud-btn--content" data-key="science" aria-label="Fait scientifique">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path
+            d="M20 85 C13 55 24 18 82 14 C85 56 54 88 20 85 Z"
+            stroke="currentColor"
+            stroke-width="5"
+            stroke-linejoin="round"
+          />
+          <path d="M24 79 C40 58 56 38 78 17" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="hud-btn hud-btn--animation" data-key="animation" aria-label="Faire apparaitre l'animation">
+        <svg viewBox="0 0 100 100" fill="currentColor">
+          <path d="M30 18 L84 50 L30 82 Z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Croix de fermeture de l'animation 3D : position fixe ecran (pas ancree sur
+         l'image, contrairement aux boutons ci-dessus) — evite que le bouton central
+         reste superpose au modele une fois celui-ci revele (src/ui/hud.ts). -->
+    <button id="hud-close-3d" hidden aria-label="Fermer l'animation 3D">✕</button>
+
+    <div id="panel">
+      <!-- Icone adaptee de src/ui/icons/audio-original.svg (voir icons/audio.svg) :
+           halo/cercle retires (le cercle est deja fourni par le CSS ci-dessous),
+           trait epaissi pour rester lisible a petite taille. -->
+      <button id="panel-audio-btn" aria-label="Lire l'audio">
+        <svg viewBox="0 0 292.21 286.09" fill="none">
+          <path
+            d="M0,148.05h44.02c2.53,0,4.77-2.28,5.57-5.66l15.86-67.4c1.06-4.5,5.62-4.37,6.54.19l23.1,113.76c.84,4.14,4.9,4.52,6.12.58l24.32-78.15c1.28-4.12,5.54-3.67,6.37.67l22,114.9c.81,4.25,5.11,4.17,5.85-.11l32.5-189.26c.68-3.97,4.73-3.85,5.28.17l21.96,158.91c.6,4.34,4.8,5.05,6.11,1.03l14.41-44.1c1.1-3.38,3.5-5.54,6.14-5.54h46.05"
+            stroke="currentColor"
+            stroke-width="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button id="panel-close" aria-label="Fermer">✕</button>
+      <div id="panel-scroll">
+        <h2 id="panel-title"></h2>
+        <p id="panel-text"></p>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
