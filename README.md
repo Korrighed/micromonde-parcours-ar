@@ -29,16 +29,23 @@ Valider qu'un modèle 3D (la tortue, avec animations) peut apparaître au scan d
 ```
 src/
   ar/           logique AR (pipeline modules XR8 + Three.js)
+  ui/           HUD (4 boutons ronds ancrés sur l'image) + widget bottom-sheet + variables.css (couleurs/typo, source unique — voir DA.md)
   map/          carte Leaflet (à venir)
-  content/      contenus texte/audio par fresque (à venir)
+  content/      textes par fresque (molecule/histoire/science) + positions des boutons, cle = nom de target 8th Wall
   progress/     état de progression localStorage (à venir)
   assets/
     models/     modèles 3D (fournis par le créa), importés en ES6 (`?url`), bundlés/hashés au build
 image-targets/   photo source + fichiers générés par @8thwall/image-target-cli, à la racine (exigence 8th Wall Desktop, mode Non-Studio)
 public/
   assets/
-    audio/      pistes audio des légendes/contenus scientifiques
+    audio/      pistes audio des légendes/contenus scientifiques (fichiers à fournir par le créa, structure en place)
 ```
+
+Direction artistique (palette, typographie, règle "pas de couleur en dur hors `variables.css`") : voir [DA.md](DA.md).
+
+**Widget contenu (molécule / histoire / science)** : sur reconnaissance d'un target, un HUD de 4 boutons ronds apparaît (`src/ui/hud.ts`) : 3 boutons ancrés sur des points de l'image (molécule systématiquement en bas-droite, histoire/science positionnés différemment par fresque via `src/content/buttonLayout.ts`), chacun ouvrant un widget plein écran (titre + texte + lecture audio optionnelle, `src/ui/panel.ts`) qui occupe toute la hauteur de la fenêtre (le bouton audio, à cheval sur son bord haut, atteint le haut de l'écran — voir `--panel-top-offset` dans `src/ui/variables.css`). Le 4e bouton, au centre (sur le modèle), révèle manuellement le modèle 3D — celui-ci reste caché à la détection tant qu'il n'a pas été pressé. Une fois révélé, ce bouton se cache (il se superposerait au modèle) et une croix fixe en haut à droite de l'écran (`#hud-close-3d`) permet de le refermer.
+
+Positions calculées par projection 3D → écran (`Vector3.project(camera)`, caméra exposée par `XR8.Threejs.xrScene()`) dans `src/ar/worldScene.ts`, transmises au HUD via un callback (`setButtonPositionListener`) — seul point de couplage `ui/` → `ar/`, dans ce sens uniquement. Données textuelles/audio/positions centralisées dans `src/content/` (clé = nom de target, ex. `poc-tortue`) — textes et offsets actuellement en placeholder, à valider/ajuster par l'équipe contenu et en testant sur la page imprimée.
 
 Pas de backend : progression stockée en `localStorage`, tout le reste est statique.
 

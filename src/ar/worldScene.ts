@@ -2,10 +2,61 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import parrotModelUrl from '../assets/models/poc-parrot.glb?url'
 import turtleModelUrl from '../assets/models/poc-turtle.glb?url'
+import { getOffsetsForTarget, type ButtonKey, type Offset } from '../content/buttonLayout'
 
 const TARGET_MODELS: Record<string, string> = {
   'poc-peruche': parrotModelUrl,
   'poc-tortue': turtleModelUrl,
+}
+
+type ImagePose = { position: THREE.Vector3; rotation: THREE.Quaternion; scale: number }
+
+export type ScreenPosition = { x: number; y: number; visible: boolean }
+export type ButtonPositions = Record<ButtonKey, ScreenPosition>
+type ButtonPositionListener = (positions: ButtonPositions) => void
+
+// Seul point de couplage UI -> AR, dans ce sens uniquement : worldScene.ts ne
+// connait rien du DOM (src/ui/hud.ts l'appelle), et n'importe jamais depuis src/ui/.
+let buttonPositionListener: ButtonPositionListener | null = null
+export const setButtonPositionListener = (listener: ButtonPositionListener) => {
+  buttonPositionListener = listener
+}
+
+// Le modele reste cache a la detection (voir applyPose) tant que l'utilisateur n'a
+// pas appuye sur le bouton central du HUD — cette fonction agit sur le target
+// actuellement reconnu, sans que l'appelant (hud.ts) ait besoin de connaitre son nom.
+let revealActiveModel: (() => void) | null = null
+export const triggerModelReveal = () => {
+  revealActiveModel?.()
+}
+
+// Symetrique de triggerModelReveal : masque le modele du target actif (croix de
+// fermeture #hud-close-3d, voir src/ui/hud.ts) — le bouton central du HUD peut
+// alors reapparaitre sans se superposer au modele.
+let hideActiveModelFn: (() => void) | null = null
+export const hideActiveModel = () => {
+  hideActiveModelFn?.()
+}
+
+// Transforme un offset local (repere de l'image, avant rotation/scale/position)
+// en point 3D monde — meme transformation que celle appliquee au modele lui-meme
+// (applyPose ci-dessous), reutilisee pour ancrer les boutons sur l'image.
+const localOffsetToWorld = (offset: Offset, pose: ImagePose): THREE.Vector3 =>
+  new THREE.Vector3(offset.x, offset.y, 0)
+    .applyQuaternion(pose.rotation)
+    .multiplyScalar(pose.scale)
+    .add(pose.position)
+
+// Projection standard Three.js monde -> ecran (NDC puis pixels). "visible" a false
+// si le point est derriere la camera ou hors du frustum (z NDC hors [-1, 1]) — le
+// HUD (hud.ts) s'en sert pour masquer un bouton dont le point d'ancrage sort du champ.
+const worldToScreen = (worldPos: THREE.Vector3, camera: THREE.Camera): ScreenPosition => {
+  const projected = worldPos.clone().project(camera)
+  return {
+    x: (projected.x * 0.5 + 0.5) * window.innerWidth,
+    y: (-projected.y * 0.5 + 0.5) * window.innerHeight,
+    visible: projected.z > -1 && projected.z < 1,
+  }
 }
 
 // Pattern verifie sur github.com/8thwall/threejs-world-effects-example (src/threejs-scene-init.js)
@@ -15,21 +66,26 @@ const TARGET_MODELS: Record<string, string> = {
 // XR8.Threejs.pipelineModule() cree deja camera + scene + renderer ; on recupere ces objets
 // via XR8.Threejs.xrScene() dans onStart, on n'instancie pas notre propre renderer/camera.
 //
-// Le modele est cache tant que la page (image target) n'est pas detectee. A la detection,
-// sa pose est fixee une fois sur les donnees de l'evenement, puis le world tracking (SLAM)
-// prend le relai pour le garder ancre pendant que la camera se deplace.
+// Le modele est cache tant que la page (image target) n'est pas detectee, ET tant que
+// le bouton central du HUD n'a pas ete presse une fois detectee (triggerModelReveal).
+// Une fois revele, le SLAM (world tracking, deja actif) garde l'objet ancre pendant que
+// la camera se deplace.
 export const worldScenePipelineModule = () => {
   const models: Record<string, THREE.Object3D> = {}
   const mixers: THREE.AnimationMixer[] = []
   const clock = new THREE.Clock()
 
-  const applyPose = (name: string, detail: { position: THREE.Vector3; rotation: THREE.Quaternion; scale: number }) => {
+  let camera: THREE.Camera | undefined
+  let activeTarget: string | null = null
+  let activePose: ImagePose | null = null
+
+  const applyPose = (name: string, pose: ImagePose) => {
     const model = models[name]
     if (!model) return
-    model.position.copy(detail.position)
-    model.quaternion.copy(detail.rotation)
-    model.scale.setScalar(detail.scale)
-    model.visible = true
+    model.position.copy(pose.position)
+    model.quaternion.copy(pose.rotation)
+    model.scale.setScalar(pose.scale)
+    // Visibilite geree par triggerModelReveal (bouton central du HUD), pas ici.
   }
 
   // Un seul target a la fois affiche : on ne compte pas sur "imagelost" du
@@ -40,11 +96,25 @@ export const worldScenePipelineModule = () => {
     }
   }
 
+  revealActiveModel = () => {
+    if (!activeTarget) return
+    const model = models[activeTarget]
+    if (model) model.visible = true
+  }
+
+  hideActiveModelFn = () => {
+    if (!activeTarget) return
+    const model = models[activeTarget]
+    if (model) model.visible = false
+  }
+
   return {
     name: 'micromonde-world-scene',
 
     onStart: ({ canvas }: { canvas: HTMLCanvasElement }) => {
-      const { scene, renderer } = XR8.Threejs.xrScene()
+      const xrScene = XR8.Threejs.xrScene()
+      const { scene, renderer } = xrScene
+      camera = xrScene.camera
 
       renderer.outputColorSpace = THREE.SRGBColorSpace
 
@@ -54,7 +124,7 @@ export const worldScenePipelineModule = () => {
       for (const [name, url] of Object.entries(TARGET_MODELS)) {
         new GLTFLoader().load(url, (gltf) => {
           const model = gltf.scene
-          model.visible = false // cache tant que la page n'est pas scannee.
+          model.visible = false // cache tant que la page n'est pas scannee et revelee.
           scene.add(model)
           models[name] = model
 
@@ -78,14 +148,28 @@ export const worldScenePipelineModule = () => {
     onUpdate: () => {
       const delta = clock.getDelta()
       mixers.forEach((mixer) => mixer.update(delta))
+
+      if (activeTarget && activePose && camera && buttonPositionListener) {
+        const offsets = getOffsetsForTarget(activeTarget)
+        const pose = activePose
+        const cam = camera
+        buttonPositionListener({
+          molecule: worldToScreen(localOffsetToWorld(offsets.molecule, pose), cam),
+          histoire: worldToScreen(localOffsetToWorld(offsets.histoire, pose), cam),
+          science: worldToScreen(localOffsetToWorld(offsets.science, pose), cam),
+          animation: worldToScreen(localOffsetToWorld(offsets.animation, pose), cam),
+        })
+      }
     },
 
     listeners: [
       {
         event: 'reality.imagefound',
-        process: ({ detail }: { detail: { name: string; position: THREE.Vector3; rotation: THREE.Quaternion; scale: number } }) => {
+        process: ({ detail }: { detail: { name: string } & ImagePose }) => {
           hideAllExcept(detail.name)
-          applyPose(detail.name, detail)
+          activeTarget = detail.name
+          activePose = { position: detail.position, rotation: detail.rotation, scale: detail.scale }
+          applyPose(detail.name, activePose)
         },
       },
       {
@@ -93,6 +177,10 @@ export const worldScenePipelineModule = () => {
         process: ({ detail }: { detail: { name: string } }) => {
           const model = models[detail.name]
           if (model) model.visible = false
+          if (activeTarget === detail.name) {
+            activeTarget = null
+            activePose = null
+          }
         },
       },
     ],
