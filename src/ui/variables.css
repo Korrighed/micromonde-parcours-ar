@@ -43,6 +43,8 @@
   --color-map-btn-bg: var(--color-natural-wood);
   --color-map-btn-text: var(--color-sand-beige);
   --color-map-user: var(--color-dark-wood);
+  --color-map-locate-bg: var(--color-hud-btn-bg); /* meme rond que les boutons du scan */
+  --color-map-locate-icon: var(--color-icon);
   --color-map-user-accuracy: rgba(74, 54, 38, 0.15); /* dark wood translucide */
 
   /* --- Typographie (Google Fonts, voir index.html pour les <link>) --- */
