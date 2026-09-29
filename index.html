@@ -107,6 +107,23 @@
       </div>
     </div>
 
+    <!-- Acces a la carte des fresques (map.html) : position fixe ecran, visible des
+         l'ouverture du scan. Place APRES #panel pour etre masque en CSS quand le
+         panel est ouvert (selecteur #panel.open ~ #map-btn, voir ui.css).
+         Icone : src/ui/icons/map.svg (plan plie, distinct des pins de la carte). -->
+    <a id="map-btn" href="./map.html" aria-label="Voir la carte des fresques">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path
+          d="M12 24 L36 14 L64 26 L88 16 V76 L64 86 L36 74 L12 84 Z"
+          stroke="currentColor"
+          stroke-width="5"
+          stroke-linejoin="round"
+        />
+        <line x1="36" y1="14" x2="36" y2="74" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        <line x1="64" y1="26" x2="64" y2="86" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+    </a>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
