@@ -1,0 +1,167 @@
+/* HUD : conteneur plein ecran, boutons positionnes individuellement en absolute.
+   pointer-events: none sur le conteneur pour ne jamais bloquer le canvas AR — chaque
+   bouton reactive pointer-events lui-meme, uniquement quand il est dans le champ
+   (voir "visible" dans src/ar/worldScene.ts / opacity ci-dessous).
+   Couleurs/typo : voir src/ui/variables.css (source unique, DA.md). */
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hud-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-hud-btn-bg);
+  color: var(--color-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  transition: opacity 0.15s ease;
+  opacity: 0;
+  pointer-events: none;
+  /* position (transform) mise a jour en JS a chaque frame par src/ui/hud.ts */
+}
+
+.hud-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+.hud-btn--animation {
+  width: 64px;
+  height: 64px;
+  background: var(--color-btn-animation-bg);
+  color: var(--color-icon-on-dark);
+}
+
+.hud-btn--animation svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Croix de fermeture de l'animation 3D : position fixe ecran (pas ancree sur
+   l'image), affichee uniquement une fois le modele revele (voir src/ui/hud.ts) —
+   evite que .hud-btn--animation reste superpose au modele. Meme esprit visuel
+   que #panel-close. */
+#hud-close-3d {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-overlay-btn-bg);
+  color: var(--color-panel-text);
+  font-size: 18px;
+  line-height: 1;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+#hud-close-3d[hidden] {
+  display: none;
+}
+
+/* Panel : toujours dans le DOM, positionne hors-ecran via transform pour
+   pouvoir animer l'apparition (slide-up) sans jouer avec [hidden]/display,
+   qui ne se transitionne pas nativement.
+   Pleine hauteur (demande DA) : top = --panel-top-offset (moitie de la hauteur
+   du bouton audio) pour que celui-ci, remonte de 50% de sa hauteur, atteigne
+   exactement le haut de la fenetre. overflow: visible ICI (pas de scroll sur
+   #panel lui-meme) pour que #panel-audio-btn et #panel-close, a moitie hors de
+   la boite, ne soient jamais rognes — le scroll est delegue a #panel-scroll. */
+#panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--panel-top-offset);
+  overflow: visible;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  background: var(--color-panel-bg);
+  color: var(--color-panel-text);
+  font-family: var(--font-body);
+  padding: 32px 20px 24px;
+  border-radius: 16px 16px 0 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#panel.open {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#panel-scroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+#panel-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+#panel-text {
+  margin: 8px 0 0;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Bouton audio rond, centre, a cheval sur le bord haut du panel. */
+#panel-audio-btn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--color-audio-btn-border);
+  background: var(--color-audio-btn-bg);
+  color: var(--color-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+
+#panel-audio-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Pas d'icone pause dediee pour l'instant (charte graphique a venir) — feedback
+   visuel minimal via opacite le temps de la lecture. */
+#panel-audio-btn.is-playing {
+  opacity: 0.6;
+}
+
+#panel-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-overlay-btn-bg);
+  color: var(--color-panel-text);
+  font-size: 16px;
+  line-height: 1;
+}

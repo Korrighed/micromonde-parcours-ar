@@ -1,0 +1,42 @@
+/* Source unique des couleurs et typographies de l'UI (voir DA.md a la racine du
+   projet pour le detail palette/typo). Regle du projet : AUCUNE couleur en dur
+   ailleurs que dans ce fichier — tout le reste (ui.css, index.html) reference
+   une variable ci-dessous. Pour changer la charte graphique, un seul fichier
+   a modifier. */
+
+:root {
+  /* --- Palette bois/nature (moodboard DA, voir DA.md) --- */
+  --color-sand-beige: #e7e1d6;
+  --color-olive-gray: #8a8f6e;
+  --color-moss-green: #5b6147;
+  --color-deep-olive: #3f452f; /* couleur principale */
+  --color-warm-taupe: #8e7f6b; /* couleur principale */
+  --color-natural-wood: #7a5a3a; /* couleur principale */
+  --color-dark-wood: #4a3626;
+
+  /* --- Tokens semantiques (usage) : composes a partir de la palette ci-dessus,
+     ou valeurs derivees (rgba) quand une opacite est necessaire. Toujours
+     modifier ICI, jamais dans ui.css/index.html. --- */
+  --color-icon: var(--color-dark-wood);
+  --color-icon-on-dark: var(--color-sand-beige);
+
+  --color-hud-btn-bg: rgba(231, 225, 214, 0.92); /* sand beige translucide */
+  --color-btn-animation-bg: var(--color-natural-wood);
+
+  --color-panel-bg: rgba(63, 69, 47, 0.96); /* deep olive translucide */
+  --color-panel-text: var(--color-sand-beige);
+
+  --color-audio-btn-bg: var(--color-sand-beige);
+  --color-audio-btn-border: var(--color-deep-olive);
+
+  --color-overlay-btn-bg: rgba(231, 225, 214, 0.15); /* fonds des croix de fermeture */
+
+  --color-shadow: rgba(0, 0, 0, 0.35);
+
+  /* --- Typographie (Google Fonts, voir index.html pour les <link>) --- */
+  --font-heading: 'Fleur De Leah', cursive;
+  --font-body: 'Quicksand', sans-serif;
+
+  /* --- Layout --- */
+  --panel-top-offset: 28px; /* moitie de la hauteur du bouton audio (56px / 2) */
+}
