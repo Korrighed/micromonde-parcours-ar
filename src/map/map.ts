@@ -55,17 +55,24 @@ const createPopupContent = (fresque: FresqueLocation) => {
 }
 
 // Position de l'utilisateur : point + cercle de precision, mis a jour en continu.
-// Refus ou erreur de geolocalisation = carte utilisable sans le point.
+// Refus ou erreur de geolocalisation = carte utilisable sans le point ni le
+// bouton de recentrage (#map-locate-btn reste cache).
 const watchUserPosition = (map: L.Map) => {
   if (!('geolocation' in navigator)) return
 
   let dot: L.CircleMarker | null = null
   let accuracy: L.Circle | null = null
 
+  const locateBtn = document.getElementById('map-locate-btn')
+  locateBtn?.addEventListener('click', () => {
+    if (dot) map.flyTo(dot.getLatLng(), Math.max(map.getZoom(), 18))
+  })
+
   navigator.geolocation.watchPosition(
     ({ coords }) => {
       const latLng = L.latLng(coords.latitude, coords.longitude)
       if (!dot || !accuracy) {
+        if (locateBtn) locateBtn.hidden = false
         accuracy = L.circle(latLng, {
           radius: coords.accuracy,
           className: 'map-user-accuracy',
@@ -92,8 +99,8 @@ const initMap = () => {
   const container = document.getElementById('map')
   if (!container) return
 
+  // Usage exclusivement mobile : zoom au pincement, pas de boutons +/-.
   const map = L.map(container, { zoomControl: false })
-  L.control.zoom({ position: 'topright' }).addTo(map)
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
