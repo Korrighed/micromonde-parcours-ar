@@ -6,6 +6,7 @@ import '../ui/variables.css'
 import './map.css'
 import * as L from 'leaflet'
 import { FRESQUE_LOCATIONS, type FresqueLocation } from '../content/locations'
+import { mountCredits } from '../ui/credits'
 
 const SCAN_URL = './'
 
@@ -114,5 +115,8 @@ const initMap = () => {
 
   watchUserPosition(map)
 }
+
+const creditsEl = document.getElementById('map-credits')
+if (creditsEl) mountCredits(creditsEl)
 
 initMap()
