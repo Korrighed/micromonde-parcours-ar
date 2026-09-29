@@ -116,6 +116,20 @@ body {
   z-index: 1000; /* au-dessus des panes Leaflet (z-index max 700) */
 }
 
+/* Credits en haut a gauche : le zoom Leaflet est en haut a droite, le bouton
+   de scan en bas. Fond opaque pour rester lisible sur les tuiles. */
+.credits--map {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 1000;
+  max-width: 260px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--color-map-bg);
+  color: var(--color-dark-wood);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  pointer-events: none;
 /* Recentrage sur l'utilisateur : rond 48px (cible tactile), en bas a droite,
    au-dessus de la ligne de #map-scan-btn pour ne jamais le chevaucher sur
    petit ecran. Cache par defaut (attribut hidden), affiche par map.ts. */

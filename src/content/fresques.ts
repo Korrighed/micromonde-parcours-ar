@@ -17,6 +17,11 @@ export const CONTENT_TITLES: Record<ContentKey, string> = {
   science: 'Fait scientifique',
 }
 
+// Mention affichee sous chaque texte du widget (src/ui/panel.ts). Une seule
+// formule pour toutes les fresques et tous les types de contenu.
+export const CONTENT_NOTICE =
+  'Ce contenu est généré à l\'aide de l\'IA et pourrait contenir des erreurs ou des imprécisions.'
+
 export type ContentBlock = {
   text: string
   audioUrl: string
@@ -59,7 +64,7 @@ export const FRESQUE_CONTENT: Record<string, FrescueContent> = {
       audioUrl: '/assets/audio/poc-hibiscus-molecule.mp3',
     },
     histoire: {
-      text: 'PLACEHOLDER — histoire traditionnelle en lien avec l\'hibiscus. A valider par l\'equipe contenu.',
+      text: 'Dans les jardins et le long des chemins de Nouvelle-Calédonie, l\'hibiscus rouge ouvre sa corolle comme un signe d\'accueil. Cette fleur, proche du bourao des rivages, appartient à une même famille que les Kanak connaissent par l\'usage autant que par le regard. Le bourao fournit en effet une écorce fibreuse, que l\'on tord en liens pour la case, la pêche et les assemblages de bois. La fleur d\'hibiscus, elle, vient orner les cheveux et les cérémonies, lorsque l\'on veut honorer un hôte ou marquer un moment de coutume. C\'est pourquoi elle circule de main en main, légère et pourtant chargée de sens. Elle rappelle que, dans ce pays, la beauté d\'une plante ne se sépare pas du geste qui la cueille, ni de la parole qui l\'accompagne.',
       audioUrl: '/assets/audio/poc-hibiscus-histoire.mp3',
     },
     science: {

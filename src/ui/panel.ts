@@ -2,7 +2,8 @@
 // Un seul <audio> HTML reutilise pour les 3 contenus (pas de lecteurs multiples,
 // pas de conflit de lecture simultanee) — suffisant pour de la narration, pas
 // besoin de la Web Audio API ici (KISS).
-import { CONTENT_TITLES, FRESQUE_CONTENT, type ContentKey } from '../content/fresques'
+import { CONTENT_NOTICE, CONTENT_TITLES, FRESQUE_CONTENT, type ContentKey } from '../content/fresques'
+import { mountCredits } from './credits'
 
 const audio = new Audio()
 
@@ -21,6 +22,12 @@ export const initPanel = () => {
   closeBtn?.addEventListener('click', closePanel)
   audioBtn?.addEventListener('click', toggleAudio)
   audio.addEventListener('ended', () => setAudioIcon(false))
+
+  const noticeEl = document.getElementById('panel-notice')
+  if (noticeEl) noticeEl.textContent = CONTENT_NOTICE
+
+  const creditsEl = document.getElementById('panel-credits')
+  if (creditsEl) mountCredits(creditsEl)
 }
 
 export const openPanel = (targetName: string, key: ContentKey) => {

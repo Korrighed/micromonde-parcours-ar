@@ -123,6 +123,21 @@
   line-height: 1.5;
 }
 
+#panel-notice {
+  margin: 28px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-warm-taupe);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.45;
+  opacity: 0.85;
+}
+
+#panel-credits {
+  margin-top: 18px;
+  opacity: 0.7;
+}
+
 /* Bouton audio rond, centre, a cheval sur le bord haut du panel. */
 #panel-audio-btn {
   position: absolute;

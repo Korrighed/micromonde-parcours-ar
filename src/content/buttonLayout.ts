@@ -25,6 +25,10 @@ const CUSTOM_OFFSETS: Record<string, { histoire: Offset; science: Offset }> = {
     histoire: { x: -0.25, y: -0.1 },
     science: { x: 0.2, y: 0.3 },
   },
+  'poc-hibiscus': {
+    histoire: { x: -0.32, y: 0.08 }, // fleur blanche, a gauche
+    science: { x: 0.16, y: 0.45 }, // hibiscus rouge, en haut
+  },
 }
 
 export const getOffsetsForTarget = (targetName: string): Record<ButtonKey, Offset> => {
