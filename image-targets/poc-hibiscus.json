@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/poc-hibiscus_luminance.png",
+  "metadata": null,
+  "name": "poc-hibiscus",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 0,
+    "width": 3000,
+    "height": 4000,
+    "isRotated": true,
+    "originalWidth": 3000,
+    "originalHeight": 4000
+  },
+  "resources": {
+    "originalImage": "poc-hibiscus_original.png",
+    "croppedImage": "poc-hibiscus_cropped.png",
+    "thumbnailImage": "poc-hibiscus_thumbnail.png",
+    "luminanceImage": "poc-hibiscus_luminance.png"
+  },
+  "created": 1790659346808,
+  "updated": 1790659346808
+}
