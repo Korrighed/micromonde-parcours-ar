@@ -33,6 +33,18 @@
 
   --color-shadow: rgba(0, 0, 0, 0.35);
 
+  /* --- Carte (map.html, src/map/map.css) --- */
+  --color-map-bg: var(--color-sand-beige);
+  --color-map-pin: var(--color-natural-wood);
+  --color-map-pin-soon: var(--color-olive-gray);
+  --color-map-pin-dot: var(--color-sand-beige);
+  --color-map-popup-bg: var(--color-deep-olive);
+  --color-map-popup-text: var(--color-sand-beige);
+  --color-map-btn-bg: var(--color-natural-wood);
+  --color-map-btn-text: var(--color-sand-beige);
+  --color-map-user: var(--color-dark-wood);
+  --color-map-user-accuracy: rgba(74, 54, 38, 0.15); /* dark wood translucide */
+
   /* --- Typographie (Google Fonts, voir index.html pour les <link>) --- */
   --font-heading: 'Fleur De Leah', cursive;
   --font-body: 'Quicksand', sans-serif;
