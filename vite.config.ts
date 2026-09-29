@@ -9,4 +9,13 @@ export default defineConfig({
   server: {
     host: true, // bind 0.0.0.0, accessible depuis le telephone sur le meme reseau
   },
+  build: {
+    // Deux pages independantes : index.html (scan AR) et map.html (carte des fresques).
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        map: 'map.html',
+      },
+    },
+  },
 })

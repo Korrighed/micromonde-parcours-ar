@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MicroMonde — Carte des fresques</title>
+    <!-- Page carte independante de l'AR (index.html) : pas de scripts 8th Wall ici,
+         le moteur n'est charge qu'au passage sur le scan. Memes polices que index.html
+         (voir DA.md). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&family=Quicksand:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- Lien general vers le scan AR (index.html) : la fresque est reconnue par
+         l'image target, pas par le marqueur choisi. -->
+    <a id="map-scan-btn" href="./">Scanner une fresque</a>
+
+    <script type="module" src="/src/map/map.ts"></script>
+  </body>
+</html>
