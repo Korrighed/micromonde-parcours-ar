@@ -2,11 +2,13 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import parrotModelUrl from '../assets/models/poc-parrotv2.glb?url'
 import turtleModelUrl from '../assets/models/poc-turtlev2.glb?url'
+import hibiscusModelUrl from '../assets/models/Hibiscus_lowpoly.glb?url'
 import { getOffsetsForTarget, type ButtonKey, type Offset } from '../content/buttonLayout'
 
 const TARGET_MODELS: Record<string, string> = {
   'poc-peruche': parrotModelUrl,
   'poc-tortue': turtleModelUrl,
+  'poc-hibiscus': hibiscusModelUrl,
 }
 
 const TURTLE_TARGET = 'poc-tortue'
