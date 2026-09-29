@@ -53,4 +53,18 @@ export const FRESQUE_CONTENT: Record<string, FrescueContent> = {
       audioUrl: '/assets/audio/poc-peruche-science.mp3',
     },
   },
+  'poc-hibiscus': {
+    molecule: {
+      text: 'PLACEHOLDER — composition moleculaire en lien avec l\'hibiscus (ex: pigments/anthocyanes des petales). A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-hibiscus-molecule.mp3',
+    },
+    histoire: {
+      text: 'PLACEHOLDER — histoire traditionnelle en lien avec l\'hibiscus. A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-hibiscus-histoire.mp3',
+    },
+    science: {
+      text: 'PLACEHOLDER — fait scientifique sur la flore locale (hibiscus, especes endemiques). A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-hibiscus-science.mp3',
+    },
+  },
 }

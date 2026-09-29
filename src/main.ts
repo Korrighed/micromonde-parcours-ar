@@ -9,6 +9,8 @@ import imageTargetData from '../image-targets/poc-peruche.json'
 import imageTargetImageUrl from '../image-targets/poc-peruche_luminance.png?url'
 import imageTargetData2 from '../image-targets/poc-tortue.json'
 import imageTargetImageUrl2 from '../image-targets/poc-tortue_luminance.png?url'
+import imageTargetData3 from '../image-targets/poc-hibiscus.json'
+import imageTargetImageUrl3 from '../image-targets/poc-hibiscus_luminance.png?url'
 
 // XR8.Threejs.pipelineModule() lit window.THREE en global (pattern legacy
 // script-tag) : verifie sur github.com/8thwall/threejs-world-effects-example
@@ -22,6 +24,7 @@ window.THREE = THREE
 // load the tracked image" (pas de precision sur le format attendu, d'ou ce contournement).
 imageTargetData.imagePath = imageTargetImageUrl
 imageTargetData2.imagePath = imageTargetImageUrl2
+imageTargetData3.imagePath = imageTargetImageUrl3
 
 // Module de test : logge la reconnaissance de chaque target — sert a verifier
 // que plusieurs targets coexistent sans interference.
@@ -66,7 +69,9 @@ const uiPipelineModule = () => ({
 
 // Pattern verifie sur github.com/8thwall/threejs-world-effects-example (src/app.js).
 const onxrloaded = () => {
-  XR8.XrController.configure({ imageTargetData: [imageTargetData, imageTargetData2] })
+  XR8.XrController.configure({
+    imageTargetData: [imageTargetData, imageTargetData2, imageTargetData3],
+  })
 
   XR8.addCameraPipelineModules([
     XR8.GlTextureRenderer.pipelineModule(),
