@@ -65,7 +65,7 @@ const watchUserPosition = (map: L.Map) => {
 
   const locateBtn = document.getElementById('map-locate-btn')
   locateBtn?.addEventListener('click', () => {
-    if (dot) map.flyTo(dot.getLatLng(), Math.max(map.getZoom(), 18))
+    if (dot) map.flyTo(dot.getLatLng(), Math.max(map.getZoom(), 19))
   })
 
   navigator.geolocation.watchPosition(
@@ -100,10 +100,11 @@ const initMap = () => {
   if (!container) return
 
   // Usage exclusivement mobile : zoom au pincement, pas de boutons +/-.
-  const map = L.map(container, { zoomControl: false })
+  const map = L.map(container, { zoomControl: false, zoomSnap: 0.25 })
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+    maxZoom: 20,
+    maxNativeZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map)
 
@@ -118,7 +119,7 @@ const initMap = () => {
 
   // Cadre sur les fresques (quelques dizaines de metres d'ecart) : padding pour
   // ne pas coller les marqueurs aux bords, maxZoom pour rester lisible.
-  map.fitBounds(bounds, { padding: [48, 48], maxZoom: 19 })
+  map.fitBounds(bounds, { padding: [24, 24], maxZoom: 20 })
 
   watchUserPosition(map)
 }
