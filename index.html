@@ -13,6 +13,24 @@
       href="https://fonts.googleapis.com/css2?family=Fleur+De+Leah&family=Quicksand:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- CSS critique : les feuilles de style sont injectees par main.ts (Vite), donc les
+         SVG du HUD/de la carte s'affichent en taille native (enormes) avant leur
+         chargement. Masques jusqu'a ce que main.ts pose body.ui-ready. -->
+    <style>
+      body:not(.ui-ready) #map-btn,
+      body:not(.ui-ready) #hud,
+      body:not(.ui-ready) #panel,
+      body:not(.ui-ready) #hud-close-3d {
+        visibility: hidden;
+      }
+      #map-btn svg {
+        width: 26px;
+        height: 26px;
+      }
+    </style>
+    <!-- Precharge la page carte pour un passage plus rapide. -->
+    <link rel="prefetch" href="./map.html" />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" />
     <!-- Coeur du moteur XR8 (image target + SLAM). URLs et pattern verifies sur
          github.com/8thwall/threejs-world-effects-example (source reelle, pas la doc). -->
     <script
