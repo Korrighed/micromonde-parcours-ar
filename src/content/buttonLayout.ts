@@ -16,7 +16,7 @@ export const ANIMATION_OFFSET: Offset = { x: 0, y: 0 } // centre, sur le modele
 const DEFAULT_HISTOIRE_OFFSET: Offset = { x: -0.3, y: 0 }
 const DEFAULT_SCIENCE_OFFSET: Offset = { x: 0.3, y: 0 }
 
-const CUSTOM_OFFSETS: Record<string, { histoire: Offset; science: Offset }> = {
+const CUSTOM_OFFSETS: Record<string, { histoire: Offset; science: Offset; molecule?: Offset }> = {
   'poc-tortue': {
     histoire: { x: -0.3, y: 0.2 },
     science: { x: 0.3, y: 0.35 },
@@ -24,17 +24,21 @@ const CUSTOM_OFFSETS: Record<string, { histoire: Offset; science: Offset }> = {
   'poc-peruche': {
     histoire: { x: -0.25, y: -0.1 },
     science: { x: 0.2, y: 0.3 },
+    // Meme hauteur que les autres fresques (bas de l'image), mais au centre.
+    molecule: { x: 0, y: MOLECULE_OFFSET.y },
   },
   'poc-hibiscus': {
     histoire: { x: -0.32, y: 0.08 }, // fleur blanche, a gauche
-    science: { x: 0.16, y: 0.45 }, // hibiscus rouge, en haut
+    science: { x: 0.16, y: 0.22 }, // hibiscus rouge, haut de l'image mais encore sur la page
+    // Formule a droite de l'image, comme la tortue, un peu rentree pour rester sur la page.
+    molecule: { x: 0.26, y: -0.34 },
   },
 }
 
 export const getOffsetsForTarget = (targetName: string): Record<ButtonKey, Offset> => {
   const custom = CUSTOM_OFFSETS[targetName]
   return {
-    molecule: MOLECULE_OFFSET,
+    molecule: custom?.molecule ?? MOLECULE_OFFSET,
     animation: ANIMATION_OFFSET,
     histoire: custom?.histoire ?? DEFAULT_HISTOIRE_OFFSET,
     science: custom?.science ?? DEFAULT_SCIENCE_OFFSET,
