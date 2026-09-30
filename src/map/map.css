@@ -1,0 +1,161 @@
+/* Page carte (map.html). Couleurs/typo : uniquement via src/ui/variables.css
+   (regle DA.md, aucune couleur en dur ici). */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  height: 100dvh; /* hauteur reelle visible sur mobile (barre d'adresse), fallback 100% */
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+#map {
+  position: fixed;
+  inset: 0;
+  background: var(--color-map-bg);
+}
+
+/* --- Marqueurs (L.divIcon, voir PIN_SVG dans map.ts) --- */
+.map-pin {
+  background: none;
+  border: none;
+  color: var(--color-map-pin);
+  filter: drop-shadow(0 2px 3px var(--color-shadow));
+}
+
+.map-pin--soon {
+  color: var(--color-map-pin-soon);
+}
+
+.map-pin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.map-pin__dot {
+  fill: var(--color-map-pin-dot);
+}
+
+/* --- Position utilisateur (L.circleMarker / L.circle) --- */
+.map-user-dot {
+  fill: var(--color-map-user);
+  fill-opacity: 1;
+  stroke: var(--color-map-pin-dot);
+  stroke-width: 3;
+}
+
+.map-user-accuracy {
+  fill: var(--color-map-user-accuracy);
+  fill-opacity: 1;
+  stroke: none;
+}
+
+/* --- Popups : surcharge du theme Leaflet par defaut --- */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-map-popup-bg);
+  color: var(--color-map-popup-text);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-map-popup-text);
+}
+
+.map-popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  font-family: var(--font-body);
+}
+
+.map-popup__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.map-popup__soon {
+  margin: 0;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+/* --- Boutons (popup + bouton general en bas d'ecran) --- */
+.leaflet-container a.map-popup__btn,
+#map-scan-btn {
+  display: inline-block;
+  border-radius: 999px;
+  background: var(--color-map-btn-bg);
+  color: var(--color-map-btn-text);
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.leaflet-container a.map-popup__btn {
+  padding: 8px 20px;
+  font-size: 15px;
+}
+
+#map-scan-btn {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  font-size: 17px;
+  white-space: nowrap;
+  z-index: 1000; /* au-dessus des panes Leaflet (z-index max 700) */
+}
+
+/* Credits en haut a gauche : le zoom Leaflet est en haut a droite, le bouton
+   de scan en bas. Fond opaque pour rester lisible sur les tuiles. */
+.credits--map {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 1000;
+  max-width: 260px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--color-map-bg);
+  color: var(--color-dark-wood);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  pointer-events: none;
+/* Recentrage sur l'utilisateur : rond 48px (cible tactile), en bas a droite,
+   au-dessus de la ligne de #map-scan-btn pour ne jamais le chevaucher sur
+   petit ecran. Cache par defaut (attribut hidden), affiche par map.ts. */
+#map-locate-btn {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(max(24px, env(safe-area-inset-bottom)) + 72px);
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-map-locate-bg);
+  color: var(--color-map-locate-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  z-index: 1000; /* au-dessus des panes Leaflet, comme #map-scan-btn */
+}
+
+#map-locate-btn[hidden] {
+  display: none;
+}
+
+#map-locate-btn svg {
+  width: 26px;
+  height: 26px;
+}

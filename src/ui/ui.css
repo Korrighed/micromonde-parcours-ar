@@ -123,6 +123,21 @@
   line-height: 1.5;
 }
 
+#panel-notice {
+  margin: 28px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-warm-taupe);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.45;
+  opacity: 0.85;
+}
+
+#panel-credits {
+  margin-top: 18px;
+  opacity: 0.7;
+}
+
 /* Bouton audio rond, centre, a cheval sur le bord haut du panel. */
 #panel-audio-btn {
   position: absolute;
@@ -164,4 +179,33 @@
   color: var(--color-panel-text);
   font-size: 16px;
   line-height: 1;
+}
+
+/* Bouton d'acces a la carte (map.html) : position fixe ecran en haut a gauche
+   (le haut droit est occupe par #hud-close-3d), zones sures respectees (encoche).
+   Meme esprit visuel que .hud-btn. Masque quand le panel est ouvert : le panel
+   couvre quasiment tout l'ecran et le bouton n'y a pas de sens. */
+#map-btn {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-hud-btn-bg);
+  color: var(--color-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  z-index: 15;
+}
+
+#map-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+#panel.open ~ #map-btn {
+  display: none;
 }

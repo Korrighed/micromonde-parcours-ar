@@ -14,7 +14,7 @@ Valider qu'un modèle 3D (la tortue, avec animations) peut apparaître au scan d
 | Langage | TypeScript | Projet amené à grossir (3 fresques, logique de progression) |
 | Moteur AR | **8th Wall Engine** | Image target + SLAM/world tracking en navigateur, gratuit et self-hosted depuis la fermeture de la plateforme payante le 28/02/2026 |
 | Rendu 3D | Three.js | Intégré nativement au pipeline 8th Wall |
-| Carte | Leaflet | Posée en dépendance, pas encore intégrée (parcours entre fresques) |
+| Carte | Leaflet | Page `map.html` : localisation des fresques + position de l'utilisateur, fond OpenStreetMap |
 | Hébergement | Netlify | Site statique, HTTPS automatique (requis pour l'accès caméra) |
 | CI | GitHub Actions | Build sur PR/push vers `main`/`dev` |
 
@@ -30,8 +30,8 @@ Valider qu'un modèle 3D (la tortue, avec animations) peut apparaître au scan d
 src/
   ar/           logique AR (pipeline modules XR8 + Three.js)
   ui/           HUD (4 boutons ronds ancrés sur l'image) + widget bottom-sheet + variables.css (couleurs/typo, source unique — voir DA.md)
-  map/          carte Leaflet (à venir)
-  content/      textes par fresque (molecule/histoire/science) + positions des boutons, cle = nom de target 8th Wall
+  map/          carte Leaflet (page map.html), indépendante de ar/
+  content/      textes par fresque (molecule/histoire/science) + positions des boutons + coordonnées GPS (locations.ts), cle = nom de target 8th Wall
   progress/     état de progression localStorage (à venir)
   assets/
     models/     modèles 3D (fournis par le créa), importés en ES6 (`?url`), bundlés/hashés au build
@@ -88,6 +88,12 @@ Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN v
 - Gestion d'assets en GUI — inspecteur de mesh (`src/assets/models/poc.glb`) avec pivot, taille de texture, simplification, **échelle** : modifie le fichier `.glb` directement, effet immédiat au reload
 
 **Structure alignée sur les exigences Non-Studio** : `src/assets/` pour les modèles, `image-targets/` à la racine sans sous-dossier, script `npm run serve -- --port <N>`. **Non documenté officiellement** : le contenu exact attendu dans `image-targets/` (photo source brute vs fichiers déjà générés par `image-target-cli`) — les deux (source + sortie du CLI) y sont en attendant clarification. Détail complet : [docs/8thwall-image-target.md](docs/8thwall-image-target.md).
+
+### Carte des fresques
+
+Page séparée `map.html` (point d'entrée prévu pour le QR code), sans chargement du moteur 8th Wall. Marqueurs par fresque (coordonnées dans `src/content/locations.ts`), popup avec lien vers le scan AR (`index.html`, inchangé), position de l'utilisateur via la géolocalisation du navigateur. Les deux pages sont déclarées dans `vite.config.ts` (`build.rollupOptions.input`).
+
+En local : `https://localhost:8888/map.html` (ou `https://<IP-LAN>:8888/map.html` sur téléphone).
 
 ### Tester sur téléphone
 

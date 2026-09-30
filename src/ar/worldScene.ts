@@ -1,12 +1,15 @@
 import * as THREE from 'three'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import parrotModelUrl from '../assets/models/poc-parrotv2.glb?url'
 import turtleModelUrl from '../assets/models/poc-turtlev2.glb?url'
+import hibiscusModelUrl from '../assets/models/Hibiscus_lowpoly.glb?url'
 import { getOffsetsForTarget, type ButtonKey, type Offset } from '../content/buttonLayout'
 
 const TARGET_MODELS: Record<string, string> = {
   'poc-peruche': parrotModelUrl,
   'poc-tortue': turtleModelUrl,
+  'poc-hibiscus': hibiscusModelUrl,
 }
 
 const TURTLE_TARGET = 'poc-tortue'
@@ -21,6 +24,53 @@ const PARROT_CLIPS = {
   fly: 'ArmatureAction',
 } as const
 const PARROT_FLY_SPEED = 1.25
+
+const HIBISCUS_TARGET = 'poc-hibiscus'
+// Le .glb est un export Blender. Le noeud racine s'appelle encore Sketchfab_model :
+// c'est un reste du fichier d'origine, pas la preuve que l'export actuel est Sketchfab.
+// Ce clip ne contient qu'une cle d'echelle sur ce noeud. La jouer ecrase l'echelle
+// de la page posee par applyPose, et le modele sort du champ.
+const HIBISCUS_SCALE_CLIP = 'Sketchfab_modelAction'
+const HIBISCUS_CLIP = 'hibiscus'
+// L'export Blender (mode Scene ou Active Actions merged) contient un seul clip.
+// On en retire la piste d'echelle du noeud racine : elle ecraserait l'echelle
+// de la page. Le reste (rotations, et translations s'il y en a) est joue tel quel,
+// de la frame 0 a la frame 160 a 24 ips.
+const HIBISCUS_FPS = 24
+const HIBISCUS_END_FRAME = 160
+// Taille max visee avant l'echelle de la page, proche de la tortue et du perroquet.
+const HIBISCUS_FIT_SIZE = 0.75
+
+const hibiscusClip = (clips: THREE.AnimationClip[]) => {
+  const endTime = HIBISCUS_END_FRAME / HIBISCUS_FPS
+  const tracks: THREE.KeyframeTrack[] = []
+
+  for (const clip of clips) {
+    if (clip.name === HIBISCUS_SCALE_CLIP) continue
+    for (const source of clip.tracks) {
+      const isRotation = source.name.endsWith('.quaternion')
+      const isTranslation = source.name.endsWith('.position')
+      if (!isRotation && !isTranslation) continue
+      const size = source.getValueSize()
+      const times: number[] = []
+      const values: number[] = []
+      for (let i = 0; i < source.times.length; i++) {
+        const time = source.times[i]
+        if (time < 0 || time > endTime + 1e-3) continue
+        times.push(time)
+        for (let k = 0; k < size; k++) values.push(source.values[i * size + k])
+      }
+      if (times.length === 0) continue
+      tracks.push(
+        isRotation
+          ? new THREE.QuaternionKeyframeTrack(source.name, times, values)
+          : new THREE.VectorKeyframeTrack(source.name, times, values),
+      )
+    }
+  }
+
+  return new THREE.AnimationClip(HIBISCUS_CLIP, endTime, tracks)
+}
 
 const playLoop = (
   mixer: THREE.AnimationMixer,
@@ -108,6 +158,9 @@ export const worldScenePipelineModule = () => {
   let camera: THREE.Camera | undefined
   let activeTarget: string | null = null
   let activePose: ImagePose | null = null
+  // Le GLB hibiscus est lourd : le clic play peut arriver avant la fin du
+  // chargement. On retient la demande pour l'appliquer quand le modele existe.
+  let revealRequested = false
 
   const applyPose = (name: string, pose: ImagePose) => {
     const model = models[name]
@@ -127,15 +180,38 @@ export const worldScenePipelineModule = () => {
   }
 
   revealActiveModel = () => {
+    revealRequested = true
     if (!activeTarget) return
     const model = models[activeTarget]
     if (model) model.visible = true
   }
 
   hideActiveModelFn = () => {
+    revealRequested = false
     if (!activeTarget) return
     const model = models[activeTarget]
     if (model) model.visible = false
+  }
+
+  // L'hibiscus Sketchfab est decale et bien plus grand que la page. On le
+  // recentre et on le ramene a HIBISCUS_FIT_SIZE dans un groupe enfant, pour
+  // que applyPose puisse poser l'echelle de la page sur le parent sans ecraser
+  // l'echelle interne de l'export.
+  const fitHibiscus = (object: THREE.Object3D) => {
+    object.updateMatrixWorld(true)
+    const box = new THREE.Box3().setFromObject(object)
+    const size = box.getSize(new THREE.Vector3())
+    const center = box.getCenter(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z)
+    const fitted = new THREE.Group()
+    if (maxDim > 0) {
+      object.position.sub(center)
+      fitted.scale.setScalar(HIBISCUS_FIT_SIZE / maxDim)
+    }
+    fitted.add(object)
+    const poseRoot = new THREE.Group()
+    poseRoot.add(fitted)
+    return poseRoot
   }
 
   return {
@@ -151,20 +227,34 @@ export const worldScenePipelineModule = () => {
       const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2)
       scene.add(light)
 
+      const loader = new GLTFLoader()
+      const dracoLoader = new DRACOLoader()
+      // Decodeur local (public/draco), pas un CDN : le telephone charge le modele
+      // depuis le PC sur le reseau local.
+      dracoLoader.setDecoderPath('/draco/')
+      loader.setDRACOLoader(dracoLoader)
+
       for (const [name, url] of Object.entries(TARGET_MODELS)) {
-        new GLTFLoader().load(url, (gltf) => {
-          const model = gltf.scene
+        loader.load(url, (gltf) => {
+          const content = gltf.scene
+          const model = name === HIBISCUS_TARGET ? fitHibiscus(content) : content
           model.visible = false // cache tant que la page n'est pas scannee et revelee.
           scene.add(model)
           models[name] = model
 
+          if (activeTarget === name && activePose) applyPose(name, activePose)
+          if (activeTarget === name && revealRequested) model.visible = true
+
           if (gltf.animations.length > 0) {
-            const mixer = new THREE.AnimationMixer(model)
+            const mixer = new THREE.AnimationMixer(content)
             if (name === TURTLE_TARGET) {
               playLoop(mixer, gltf.animations, TURTLE_CLIPS.swim, TURTLE_SWIM_SPEED)
               playLoop(mixer, gltf.animations, TURTLE_CLIPS.light)
             } else if (name === PARROT_TARGET) {
               playLoop(mixer, gltf.animations, PARROT_CLIPS.fly, PARROT_FLY_SPEED)
+            } else if (name === HIBISCUS_TARGET) {
+              const clip = hibiscusClip(gltf.animations)
+              playLoop(mixer, [clip], HIBISCUS_CLIP)
             } else {
               mixer.clipAction(gltf.animations[0]).play()
             }
@@ -204,6 +294,7 @@ export const worldScenePipelineModule = () => {
         event: 'reality.imagefound',
         process: ({ detail }: { detail: { name: string } & ImagePose }) => {
           hideAllExcept(detail.name)
+          revealRequested = false
           activeTarget = detail.name
           activePose = { position: detail.position, rotation: detail.rotation, scale: detail.scale }
           applyPose(detail.name, activePose)
@@ -215,6 +306,7 @@ export const worldScenePipelineModule = () => {
           const model = models[detail.name]
           if (model) model.visible = false
           if (activeTarget === detail.name) {
+            revealRequested = false
             activeTarget = null
             activePose = null
           }
