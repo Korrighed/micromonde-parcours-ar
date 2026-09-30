@@ -17,6 +17,9 @@ import imageTargetImageUrl3 from '../image-targets/poc-hibiscus_luminance.png?ur
 // (src/app.js) — sans ca, "window.THREE does not exist" au chargement.
 window.THREE = THREE
 
+// CSS charge (imports ci-dessus) : revele les elements masques par le CSS critique d'index.html.
+document.body.classList.add('ui-ready')
+
 // imagePath dans le JSON est un chemin relatif brut (image-targets/...) : le moteur le
 // fetch tel quel au runtime, ce qui ne resout a rien avec notre bundler. On le remplace
 // par l'URL bundlee par Vite (meme pattern que le .glb). Verifie sur le README officiel
