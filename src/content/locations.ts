@@ -14,6 +14,6 @@ export type FresqueLocation = {
 
 export const FRESQUE_LOCATIONS: FresqueLocation[] = [
   { key: 'poc-hibiscus', name: 'Hibiscus', lat: -22.263152, lng: 166.403967, available: true },
-  { key: 'poc-peruche', name: 'Perruche', lat: -22.263086, lng: 166.404496, available: true },
+  { key: 'poc-loriquet', name: 'Loriquet', lat: -22.263086, lng: 166.404496, available: true },
   { key: 'poc-tortue', name: 'Tortue', lat: -22.262283, lng: 166.405464, available: true },
 ]

@@ -16,7 +16,7 @@ Valider qu'un modèle 3D (la tortue, avec animations) peut apparaître au scan d
 | Rendu 3D | Three.js | Intégré nativement au pipeline 8th Wall |
 | Carte | Leaflet | Page `map.html` : localisation des fresques + position de l'utilisateur, fond OpenStreetMap |
 | Hébergement | Netlify | Site statique, HTTPS automatique (requis pour l'accès caméra) |
-| CI | GitHub Actions | Build sur PR/push vers `main`/`dev` |
+| CI | Aucune | Workflow GitHub Actions supprimé le 04/09/2026 |
 
 ### Pourquoi pas MindAR ni Vuforia
 
@@ -34,7 +34,7 @@ src/
   content/      textes par fresque (molecule/histoire/science) + positions des boutons + coordonnées GPS (locations.ts), cle = nom de target 8th Wall
   progress/     état de progression localStorage (à venir)
   assets/
-    models/     modèles 3D (fournis par le créa), importés en ES6 (`?url`), bundlés/hashés au build
+    models/     modèles 3D (réalisés par Léandre Vigouroux), importés en ES6 (`?url`), bundlés/hashés au build
 image-targets/   photo source + fichiers générés par @8thwall/image-target-cli, à la racine (exigence 8th Wall Desktop, mode Non-Studio)
 public/
   assets/
@@ -91,7 +91,7 @@ Accès caméra = contexte sécurisé obligatoire (HTTPS, `localhost` ou IP LAN v
 
 ### Carte des fresques
 
-Page séparée `map.html` (point d'entrée prévu pour le QR code), sans chargement du moteur 8th Wall. Marqueurs par fresque (coordonnées dans `src/content/locations.ts`), popup avec lien vers le scan AR (`index.html`, inchangé), position de l'utilisateur via la géolocalisation du navigateur. Les deux pages sont déclarées dans `vite.config.ts` (`build.rollupOptions.input`).
+Page séparée `map.html` (accessible par le bouton carte de la page de scan), sans chargement du moteur 8th Wall. Marqueurs par fresque (coordonnées dans `src/content/locations.ts`), popup avec lien vers le scan AR (`index.html`, inchangé), position de l'utilisateur via la géolocalisation du navigateur. Les deux pages sont déclarées dans `vite.config.ts` (`build.rollupOptions.input`).
 
 En local : `https://localhost:8888/map.html` (ou `https://<IP-LAN>:8888/map.html` sur téléphone).
 
@@ -111,6 +111,27 @@ Planning initial (29/07) prévoyait 10 semaines. État réel au 01/09 : ~5 semai
 
 ## CI/CD
 
-- **CI** (`.github/workflows/ci.yml`) : `npm run build` sur PR et push vers `main`/`dev`.
-- **CD** : Netlify, déploiement git natif. `dev` → preview, `main` → prod. Pas encore connecté.
+- **CI** : aucun workflow actif. Le workflow GitHub Actions (`ci.yml`) a été supprimé le 04/09/2026.
+- **CD** : site déployé sur Netlify, compte personnel d'Alexis Boutin, formule gratuite. Branche déployée en production : `main`.
 - Git flow : `feature/*` → merge `--no-ff` sur `dev` (validation manuelle avant merge) → `dev` → `main`.
+
+## Documentation
+
+| Fichier | Contenu |
+|---|---|
+| [docs/PRD.md](docs/PRD.md) | But du produit, objectifs, user stories, exigences, périmètre par version |
+| [docs/APP-FLOW.md](docs/APP-FLOW.md) | Écrans, parcours utilisateur, états (schémas Mermaid) |
+| [docs/TRD.md](docs/TRD.md) | Stack, architecture, données et contenus, intégrations, décisions, risques |
+| [docs/DESIGN-BRIEF.md](docs/DESIGN-BRIEF.md) | Design : renvoi à [DA.md](DA.md), composants |
+| [docs/CONTES-INSPIRATION.md](docs/CONTES-INSPIRATION.md) | Matière d'inspiration pour les contes provisoires |
+
+## Licence
+
+Le **code** et les **modèles 3D** (`src/assets/models/`, réalisés par Léandre Vigouroux) sont sous licence MIT (voir [LICENSE](LICENSE)).
+
+La licence **ne couvre pas** :
+
+- les fresques de Kuby Kolor et leurs reproductions (images de `image-targets/`) ;
+- les textes et enregistrements des contenus.
+
+Ces éléments restent soumis aux droits de leurs auteurs.
