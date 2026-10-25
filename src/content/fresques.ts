@@ -1,6 +1,6 @@
 // Source de verite unique pour les textes/audio affiches dans le widget UI (src/ui/panel.ts).
 // Cles alignees sur les noms de target 8th Wall utilises dans src/ar/worldScene.ts
-// (TARGET_MODELS) : 'poc-tortue', 'poc-peruche' — un seul vocabulaire dans tout le projet.
+// (TARGET_MODELS) : 'poc-tortue', 'poc-loriquet' — un seul vocabulaire dans tout le projet.
 //
 // Textes ci-dessous = PLACEHOLDER, a valider/remplacer par l'equipe contenu scientifique
 // avant la Nuit de la Science. Fichiers audio a fournir par le crea dans
@@ -44,18 +44,18 @@ export const FRESQUE_CONTENT: Record<string, FrescueContent> = {
       audioUrl: '/assets/audio/poc-tortue-science.mp3',
     },
   },
-  'poc-peruche': {
+  'poc-loriquet': {
     molecule: {
-      text: 'PLACEHOLDER — composition moleculaire en lien avec la peruche (ex: pigments des plumes). A valider par l\'equipe contenu.',
-      audioUrl: '/assets/audio/poc-peruche-molecule.mp3',
+      text: 'PLACEHOLDER — composition moleculaire en lien avec le loriquet a tete bleue (ex: pigments des plumes). A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-loriquet-molecule.mp3',
     },
     histoire: {
-      text: 'PLACEHOLDER — histoire traditionnelle en lien avec la peruche. A valider par l\'equipe contenu.',
-      audioUrl: '/assets/audio/poc-peruche-histoire.mp3',
+      text: 'PLACEHOLDER — histoire traditionnelle en lien avec le loriquet a tete bleue. A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-loriquet-histoire.mp3',
     },
     science: {
-      text: 'PLACEHOLDER — fait scientifique sur la faune/flore locale (peruche, especes endemiques). A valider par l\'equipe contenu.',
-      audioUrl: '/assets/audio/poc-peruche-science.mp3',
+      text: 'PLACEHOLDER — fait scientifique sur la faune/flore locale (loriquet a tete bleue, especes endemiques). A valider par l\'equipe contenu.',
+      audioUrl: '/assets/audio/poc-loriquet-science.mp3',
     },
   },
   'poc-hibiscus': {
