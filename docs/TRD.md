@@ -181,7 +181,7 @@ Séquence du scan : voir [APP-FLOW.md](APP-FLOW.md) § 3.
 | 2026-10-26 | Hébergement Netlify, compte personnel d'Alexis Boutin, formule gratuite | — | Coût nul. Le projet reste forkable |
 | 2026-10-26 | Licence MIT pour le code et pour les trois modèles 3D de Léandre Vigouroux | Aucune licence | Fork et réutilisation permis. Les fresques de Kuby Kolor, leurs reproductions (images des cibles) et les contenus restent exclus (voir § 10) |
 | 2026-10-26 | Contenus provisoires = contes générés par IA, étiquetés comme tels | Textes présentés comme légendes traditionnelles | Aucun conte kanak sourcé sur les trois sujets ([CONTES-INSPIRATION.md](CONTES-INSPIRATION.md)) |
-| 2026-10-26 | Molécules : description de l'artiste conservée ; écarts relevés par les recherches signalés en note | Réécriture par l'équipe | Le choix scientifique relève de l'artiste ; la note cite les sources ([FICHE-REALISATION.md](FICHE-REALISATION.md), note 1) |
+| 2026-10-26 | Molécules : description de l'artiste conservée ; écarts relevés par les recherches signalés en note | Réécriture par l'équipe | Le choix scientifique relève de l'artiste ; la note cite les sources consultées |
 | 2026-10-26 | Modèle de données fusionné dans ce document (§ 3) | Document séparé | Application sans base de données ; évite les doublons |
 | 2026-10-26 | Le QR physique mène à la page de scan | Entrée par la carte | Décision de l'équipe ; la carte reste accessible par le bouton du scan |
 | 2026-10-26 | Clé `poc-peruche` renommée `poc-loriquet` (fichiers, cibles, code, carte) | Garder « perruche » | Nom de l'espèce selon l'artiste : loriquet à tête bleue |
