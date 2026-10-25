@@ -1,7 +1,7 @@
 {
-  "imagePath": "image-targets/poc-peruche_luminance.png",
+  "imagePath": "image-targets/poc-loriquet_luminance.png",
   "metadata": null,
-  "name": "poc-peruche",
+  "name": "poc-loriquet",
   "type": "PLANAR",
   "properties": {
     "top": 0,
@@ -13,10 +13,10 @@
     "originalHeight": 1280
   },
   "resources": {
-    "originalImage": "poc-peruche_original.png",
-    "croppedImage": "poc-peruche_cropped.png",
-    "thumbnailImage": "poc-peruche_thumbnail.png",
-    "luminanceImage": "poc-peruche_luminance.png"
+    "originalImage": "poc-loriquet_original.png",
+    "croppedImage": "poc-loriquet_cropped.png",
+    "thumbnailImage": "poc-loriquet_thumbnail.png",
+    "luminanceImage": "poc-loriquet_luminance.png"
   },
   "created": 1788492411166,
   "updated": 1788494085775
