@@ -6,7 +6,7 @@ Sources : code `0.3.0-beta` (`src/main.ts`, `src/ui/hud.ts`, `src/ui/panel.ts`, 
 
 Les schémas distinguent le **constaté** (lu dans le code ou vu en vidéo) du **prévu** (fiche projet, pas encore codé). Les nœuds prévus portent la mention « V2 ».
 
-Le QR du support physique mène à la **page de scan** (décision du 26/10/2026) ; la carte s'ouvre depuis le scan. Les retours observés après usage sont dans [TESTS-UTILISATEURS.md](TESTS-UTILISATEURS.md).
+Le QR du support physique mène à la **page de scan** (décision du 26/10/2026) ; la carte s'ouvre depuis le scan.
 
 ## 1. Carte des écrans et vues
 

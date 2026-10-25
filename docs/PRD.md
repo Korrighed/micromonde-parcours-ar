@@ -21,7 +21,7 @@ L'Université de la Nouvelle-Calédonie (UNC) accueille un parcours de fresques 
 | O-05 | Coût nul et projet reproductible | Logiciels open source, hébergement gratuit, licence libre MIT ajoutée le 26/10 (fichier `LICENSE`) | Livré |
 | O-06 | Donner envie de tout parcourir : progression, récompense | Voir F-14, F-15 | Prévu V2 |
 
-Retours de la séance du 08/10/2026 (20 personnes) : l'interface est assez claire et les modèles 3D ont marqué ; aucun retour sur l'apprentissage ni sur la molécule. Détail : [TESTS-UTILISATEURS.md](TESTS-UTILISATEURS.md).
+Retours de la séance du 08/10/2026 (20 personnes) : l'interface est assez claire et les modèles 3D ont marqué ; aucun retour sur l'apprentissage ni sur la molécule.
 
 ## 3. Non-objectifs
 
@@ -126,7 +126,7 @@ flowchart LR
 | Version | Contenu |
 |---|---|
 | V1 (livrée) | O-01 à O-05 ; F-01 à F-12 (F-07 sans fichier audio) ; contenus = contes générés par IA |
-| V2 | F-07 (audio réel), F-13 à F-17 ; contenus recherchés et validés ; supports physiques (QR 3D, braille à l'étude) ; correction des cibles tactiles (NF-04) ; amélioration du suivi de l'image (retours de la classe, [TESTS-UTILISATEURS.md](TESTS-UTILISATEURS.md) § 6) |
+| V2 | F-07 (audio réel), F-13 à F-17 ; contenus recherchés et validés ; supports physiques (QR 3D, braille à l'étude) ; correction des cibles tactiles (NF-04) ; amélioration du suivi de l'image (retours de la classe) |
 | Futur | Fresque du champignon *Pisolithus albus* ; fresque *Le Voyage* ; ambiance sonore ; animation du monde microscopique ; goodie final : nouveau parcours |
 
 Piste à décider : faciliter la prise de photo avec le modèle 3D, observée pendant la séance du 08/10/2026.

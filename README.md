@@ -123,9 +123,6 @@ Planning initial (29/07) prévoyait 10 semaines. État réel au 01/09 : ~5 semai
 | [docs/APP-FLOW.md](docs/APP-FLOW.md) | Écrans, parcours utilisateur, états (schémas Mermaid) |
 | [docs/TRD.md](docs/TRD.md) | Stack, architecture, données et contenus, intégrations, décisions, risques |
 | [docs/DESIGN-BRIEF.md](docs/DESIGN-BRIEF.md) | Design : renvoi à [DA.md](DA.md), composants |
-| [docs/FICHE-REALISATION.md](docs/FICHE-REALISATION.md) | Fiche de réalisation |
-| [docs/DOSSIER-CONCEPTION.md](docs/DOSSIER-CONCEPTION.md) | Dossier de conception |
-| [docs/TESTS-UTILISATEURS.md](docs/TESTS-UTILISATEURS.md) | Protocole et retours de tests |
 | [docs/CONTES-INSPIRATION.md](docs/CONTES-INSPIRATION.md) | Matière d'inspiration pour les contes provisoires |
 
 ## Licence
