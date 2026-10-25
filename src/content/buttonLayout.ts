@@ -21,7 +21,7 @@ const CUSTOM_OFFSETS: Record<string, { histoire: Offset; science: Offset; molecu
     histoire: { x: -0.3, y: 0.2 },
     science: { x: 0.3, y: 0.35 },
   },
-  'poc-peruche': {
+  'poc-loriquet': {
     histoire: { x: -0.25, y: -0.1 },
     science: { x: 0.2, y: 0.3 },
     // Meme hauteur que les autres fresques (bas de l'image), mais au centre.

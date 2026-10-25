@@ -7,7 +7,7 @@ import hibiscusModelUrl from '../assets/models/Hibiscus_lowpoly.glb?url'
 import { getOffsetsForTarget, type ButtonKey, type Offset } from '../content/buttonLayout'
 
 const TARGET_MODELS: Record<string, string> = {
-  'poc-peruche': parrotModelUrl,
+  'poc-loriquet': parrotModelUrl,
   'poc-tortue': turtleModelUrl,
   'poc-hibiscus': hibiscusModelUrl,
 }
@@ -19,7 +19,7 @@ const TURTLE_CLIPS = {
 } as const
 const TURTLE_SWIM_SPEED = 0.5
 
-const PARROT_TARGET = 'poc-peruche'
+const PARROT_TARGET = 'poc-loriquet'
 const PARROT_CLIPS = {
   fly: 'ArmatureAction',
 } as const
